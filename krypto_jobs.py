@@ -34,7 +34,7 @@ w3 = Web3(Web3.HTTPProvider("HTTP://127.0.0.1:7545"))
 ################################################################################
 # Step 1:
 # Import Ethereum Transaction Functions into the KryptoJobs2Go Application
-from krypto_jobs import generate_account, get_balance, send_transaction
+
 # In this section, you'll import several functions from the `crypto_wallet.py`
 # script into the file `krypto_jobs.py`, which contains code for Fintech
 # Finder’s customer interface, in order to add wallet operations to the
@@ -78,6 +78,7 @@ from krypto_jobs import generate_account, get_balance, send_transaction
 # * `send_transaction`
 
 # @TODO:
+from crypto_wallet import generate_account, get_balance, send_transaction
 # From `crypto_wallet.py import the functions generate_account, get_balance,
 #  and send_transaction
 # YOUR CODE HERE
@@ -156,7 +157,9 @@ st.sidebar.markdown("## Client Account Address and Ethernet Balance in Ether")
 
 # @TODO:
 #  Call the `generate_account` function and save it as the variable `account`
-# YOUR CODE HERE
+account = generate_account()
+
+print(account)
 
 ##########################################
 
@@ -173,7 +176,8 @@ st.sidebar.write(account.address)
 # Call `get_balance` function and pass it your account address
 # Write the returned ether balance to the sidebar
 # YOUR CODE HERE
-
+balance = get_balance(w3, account.address)
+st.sidebar.write(balance)
 ##########################################
 
 # Create a select box to chose a FinTech Hire candidate
@@ -223,9 +227,12 @@ st.sidebar.markdown("## Total Wage in Ether")
 # the value of the `hours` variable. Save this calculation’s output as a
 # variable named `wage`.
 
+wage = hourly_rate * hours
+print(f"Total Wage in Ether: {wage}")
+
 # * Write the `wage` variable to the Streamlit sidebar by
 # using `st.sidebar.write`.
-
+st.sidebar.write(wage)
 # 2. Now that the application can calculate a candidate’s wage, write the code
 # that will allow a customer (you, in this case) to send an Ethereum blockchain
 # transaction that pays the hired candidate. To accomplish this, locate the
@@ -295,6 +302,7 @@ if st.sidebar.button("Send Transaction"):
     # Your `account`, the `candidate_address`, and the `wage` as parameters
     # Save the returned transaction hash as a variable named `transaction_hash`
     # YOUR CODE HERE
+    transaction_hash = send_transaction(w3, account, candidate_address, wage)
 
     # Markdown for the transaction hash
     st.sidebar.markdown("#### Validated Transaction Hash")
